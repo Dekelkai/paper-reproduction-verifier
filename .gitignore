@@ -1,0 +1,10 @@
+# LaTeX 中间产物
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+# 保留交付物示例 PDF（templates/复现报告示例.pdf），其余临时 PDF 忽略
+/*.pdf

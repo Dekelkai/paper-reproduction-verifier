@@ -1,0 +1,167 @@
+% !TEX program = xelatex
+% ============================================================
+% 论文复现报告（含问题反馈） · LaTeX 通用模板
+% 编译：xelatex（需 ctex 宏包，支持中文）
+% 用法：替换 <...> 占位符；表格 / 问题条目按需增删。
+% 说明：本模板为“单一交付物”——问题反馈已作为第 6 节并入报告，
+%       不再单独出具问题反馈文件。
+% ============================================================
+\documentclass[11pt]{article}
+
+\usepackage{ctex}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 论文复现报告}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\verdict}[1]{{\bfseries #1}}
+
+% 问题条目命令：\issue{类别}{问题描述}{证据}{建议作者补充}
+\newcommand{\issue}[4]{%
+  \par\smallskip
+  \noindent\textbf{【#1】}\\
+  \textbf{问题描述：}#2\\
+  \textbf{证据：}#3\\
+  \textbf{建议作者补充：}#4
+  \par\smallskip\hrule\smallskip
+}
+
+\title{\Huge 复现报告}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+% ============================================================
+\section{基本信息}
+\begin{center}
+\begin{tabular}{>{\bfseries}l p{11cm}}
+\toprule
+编号    & <编号，如 520250626000001> \\
+论文    & <论文英文标题> \\
+中文名  & <论文中文名> \\
+随稿文件 & <论文 / 代码 / 数据 / Docker 等文件清单> \\
+复现结论 & <完全复现 / 部分复现 / 无法复现>（复现率 <XX>\%） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section{复现环境}
+\begin{center}
+\begin{tabular}{>{\bfseries}l p{10cm}}
+\toprule
+项目 & 说明 \\
+\midrule
+操作系统      & <如 Windows 11 / Ubuntu 22.04> \\
+Python 版本   & <如 Python 3.x> \\
+关键依赖      & <numpy / pandas / torch / ... 及版本> \\
+GPU/CPU 配置  & <硬件与实际使用情况> \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+\section{复现过程记录}
+
+\subsection{论文工作的理解}
+论文声称完成了以下工作：
+\begin{enumerate}[leftmargin=2em]
+  \item <研究问题 / 应用场景>
+  \item <数据规模与实验设计>
+  \item <采用的方法 / 模型 / 统计手段>
+  \item <声称的关键结果>
+  \item <核心结论>
+\end{enumerate}
+\noindent\textit{关键事实：<如数据是否真实/合成、是否有公开数据集等需先点明的前提>}
+
+\subsection{根据论文应复现的关键实验}
+\begin{enumerate}[leftmargin=2em]
+  \item <实验一：对应论文 Table/Figure X，关键数值>
+  \item <实验二：……>
+  \item <实验三：……>
+\end{enumerate}
+
+\subsection{仓库与运行说明检查}
+\begin{itemize}[leftmargin=2em]
+  \item <代码组织、README/依赖是否齐全>
+  \item <入口脚本、产出物>
+  \item <可运行性、已知坑（路径/依赖/容器等）>
+\end{itemize}
+
+\subsection{实际执行过程}
+\begin{enumerate}[leftmargin=2em]
+  \item <搭环境>
+  \item <运行命令与产出>
+  \item <为运行所做的最小改动（逐条留痕）>
+\end{enumerate}
+
+\subsection{代码与论文的一致性分析}
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{<问题标题>}：<事实描述，引用 文件:行号>
+  \item \textbf{<问题标题>}：<……>
+\end{enumerate}
+
+% ============================================================
+\section{评价指标}
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{流程可运行性}：<…>
+  \item \textbf{论文结果一致性}：<…>
+  \item \textbf{方法实现一致性}：<…>
+  \item \textbf{实证可追溯性}：<…>
+\end{enumerate}
+
+% ============================================================
+\section{复现指标对比}
+\begin{center}
+\begin{longtable}{p{4.5cm} c c c p{3cm}}
+\toprule
+指标 & 论文结果 & 实际复现结果 & 差异 & 结论 \\
+\midrule
+\endhead
+<指标1> & <论文值> & <复现值> & <差异> & <接近/不一致/缺失> \\
+<指标2> & <论文值> & <复现值> & <差异> & <…> \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+% ============================================================
+\section{问题反馈}
+\noindent\textit{注：问题类别可包括——代码问题、环境问题、数据集问题、指标问题、模型问题、文档说明问题等其他问题。无阻断性问题时本节可写“无”。}
+
+\medskip
+\hrule\smallskip
+% 用 \issue{类别}{问题描述}{证据}{建议作者补充} 逐条填写：
+\issue{<模型问题>}{<具体问题描述>}{<截图 / 文件:行号 / 实测数值>}{<要求作者补充的内容>}
+\issue{<数据集问题>}{<…>}{<…>}{<…>}
+\issue{<指标问题>}{<…>}{<…>}{<…>}
+
+% ============================================================
+\section{结论}
+
+\subsection*{（1）分析}
+<从“工程运行”与“论文复现”两个角度分别分析；列出可复现的部分与阻断性问题。>
+
+\subsection*{（2）结论}
+综合判断：\verdict{<完全复现 / 部分复现 / 无法复现>}。<一句话理由。>
+
+\bigskip
+\noindent{\Large\bfseries 最终复现率：<XX>\%}
+
+\medskip
+\noindent\textbf{复现率说明：}<说明该比例的评定依据。>
+
+\end{document}

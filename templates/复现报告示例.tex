@@ -1,0 +1,136 @@
+% !TEX program = xelatex
+% ============================================================
+% 复现报告 · 示例（匿名）
+% 仅用于演示报告的结构与“每个位置该放什么”，全部数据为虚构占位，
+% 不对应任何真实稿件或作者。实际使用时套用 复现报告模板.tex 填真实内容。
+% ============================================================
+\documentclass[11pt]{article}
+\usepackage{ctex}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{booktabs}\usepackage{longtable}\usepackage{array}
+\usepackage{xcolor}\usepackage{enumitem}\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small 复现报告（示例·匿名）}\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\newcommand{\verdict}[1]{{\bfseries #1}}
+\newcommand{\issue}[4]{\par\smallskip\noindent\textbf{【#1】}\\
+  \textbf{问题描述：}#2\\ \textbf{证据：}#3\\ \textbf{建议作者补充：}#4
+  \par\smallskip\hrule\smallskip}
+\title{\Huge 复现报告\\[2mm]\large （示例 · 内容均为虚构占位）}\date{}
+\begin{document}
+\maketitle\thispagestyle{fancy}
+
+\begin{center}\itshape\small
+本文件仅演示报告结构与各处应填内容，论文名、数值、问题均为虚构，不对应任何真实稿件。
+\end{center}
+\medskip
+
+\section{基本信息}
+\begin{center}\begin{tabular}{>{\bfseries}l p{11cm}}
+\toprule
+编号    & XXXXXXXXXXXX \\
+论文    & （示例）某序列模型在某应用场景中的方法 \\
+中文名  & （示例论文，标题略） \\
+随稿文件 & 论文文档、代码（单脚本）、数据表、容器文件 \\
+复现结论 & 部分复现，复现率约 XX\% \\
+\bottomrule
+\end{tabular}\end{center}
+
+\section{复现环境}
+\begin{center}\begin{tabular}{>{\bfseries}l p{10cm}}
+\toprule
+项目 & 说明 \\ \midrule
+操作系统     & <操作系统及版本> \\
+Python 版本  & <Python 版本> \\
+关键依赖     & <主要库及版本> \\
+GPU/CPU 配置 & <硬件与实际使用情况> \\
+\bottomrule
+\end{tabular}\end{center}
+
+\section{复现过程记录}
+
+\subsection{论文工作的理解}
+论文声称完成了以下工作（此处逐条概述，不展开真实细节）：
+\begin{enumerate}[leftmargin=2em]
+  \item <研究问题与应用场景>。
+  \item <数据规模与实验设计，如分组/前后对比>。
+  \item <采用的方法、模型与统计手段>。
+  \item <声称的关键结果，对应论文某表/图>。
+  \item <核心结论>。
+\end{enumerate}
+\noindent\textit{关键事实：<需先点明的前提，如数据是否真实/合成、有无公开数据集>。}
+
+\subsection{根据论文应复现的关键实验}
+\begin{enumerate}[leftmargin=2em]
+  \item <实验一：对应论文 Table/Figure，关键数值>。
+  \item <实验二：……>。
+  \item <实验三（如核心模型的指标实验）：……>。
+\end{enumerate}
+
+\subsection{仓库与运行说明检查}
+\begin{itemize}[leftmargin=2em]
+  \item <代码组织、有无 README/依赖说明>。
+  \item <入口脚本与产出物>。
+  \item <可运行性与已知坑，如路径/依赖/容器文件名问题>。
+\end{itemize}
+
+\subsection{实际执行过程}
+\begin{enumerate}[leftmargin=2em]
+  \item <搭环境、运行命令与产物>。
+  \item <对数据/结果做的核对，如验证数据是否即代码输出>。
+  \item <为运行所做的最小改动，逐条留痕>。
+\end{enumerate}
+
+\subsection{代码与论文的一致性分析}
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{<红线项，如数据是否合成/效应是否写死>}：<事实描述，引用 文件:行号>。
+  \item \textbf{<红线项，如核心模型是否真训练评测>}：<……>。
+  \item \textbf{<指标/数值类问题>}：<……（随机数据时区分随机差异与结构性不可能）>。
+  \item \textbf{<可对上的部分，注明非问题>}：<……>。
+\end{enumerate}
+
+\section{评价指标}
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{流程可运行性}：脚本能否按提供方式跑通。
+  \item \textbf{论文结果一致性}：代码输出是否与论文表格/结论相符。
+  \item \textbf{方法实现一致性}：论文方法/模型/统计是否在代码中真实现。
+  \item \textbf{实证可追溯性}：能否从代码与数据追溯论文核心结果。
+\end{enumerate}
+
+\section{复现指标对比}
+\noindent\small 说明：<数据来源说明；随机数据时附“多种子范围”列以区分随机差异与结构性不可能>。
+\begin{center}\begin{longtable}{p{3.9cm} c c c p{2.7cm}}
+\toprule
+指标 & 论文值 & 实跑值 & 多种子范围 & 结论 \\ \midrule \endhead
+<描述/统计指标 1> & <值> & <值> & <范围或—> & 随机实现内 \\
+<描述/统计指标 2> & <值> & <值> & <范围或—> & 随机实现内 \\
+\textbf{<可独立检验指标 A>} & \textbf{<值>} & <值> & \textbf{<范围>} & \textbf{结构性不可能} \\
+\textbf{<可独立检验指标 B>} & \textbf{<值>} & <值> & \textbf{<范围>} & \textbf{结构性不可能} \\
+\textbf{<核心模型指标>} & 声称提升 & 无实现 & --- & \textbf{未实现} \\
+<容器/环境项> & 应可用 & <实际> & --- & <失败/通过> \\
+\bottomrule
+\end{longtable}\end{center}
+
+\section{问题反馈}
+\noindent\textit{注：问题类别可包括——代码、环境、数据集、指标、模型、文档说明等。无阻断性问题时本节写“无”。}
+\medskip\hrule\smallskip
+\issue{<模型问题>}{<具体问题，如核心模型只初始化未训练评测>}{<文件:行号 / 搜索关键词无命中>}{<请补充训练与评测代码、数据及实测指标>}
+\issue{<数据集问题>}{<如数据为合成、结果不可独立验证>}{<文件:行号 / 数据==代码输出>}{<请提供真实或可验证的数据来源>}
+\issue{<指标问题>}{<如论文某指标代码未计算/数值结构性不可能>}{<自算值 / 多种子范围>}{<请提供可复现该指标的脚本与数据>}
+\issue{<环境问题>}{<如容器无法构建、依赖缺失>}{<文件:行号>}{<请修正并补依赖说明>}
+
+\section{结论}
+\subsection*{（1）分析}
+<从“工程运行”与“论文复现”两角度分析：哪些在随机/工程意义上可对上、哪些是结构性的阻断问题；核心贡献是否被验证。>
+
+\subsection*{（2）结论}
+综合判断：\verdict{<完全/部分/无法复现>}。<一句话理由。>
+
+\bigskip
+\noindent{\Large\bfseries 最终复现率：约 XX\%}
+
+\medskip
+\noindent\textbf{复现率说明：}<评定依据；注明系审核判断而非精确测量。>
+
+\end{document}
