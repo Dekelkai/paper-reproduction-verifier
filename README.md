@@ -1,28 +1,83 @@
 # paper-reproduction-verifier
 
-一个可移植的 **Agent Skill**：独立核验投稿论文的可复现性——仅凭作者随稿的代码与数据，
-验证论文方法与声称结果能否被忠实复现，产出**一份复现报告**（含问题反馈）与复现率判定。
+论文复现验证 Skill - 独立核验投稿论文的可复现性
+
+## 简介
+
+仅凭作者随稿的代码与数据，验证论文方法与声称结果能否被忠实复现。产出**一份复现报告**（含问题反馈）与复现率判定。
+
+适用于：
+- 期刊/会议送审稿件的复现验证
+- "复现这篇论文"
+- "核对代码与论文是否一致"
+- 审稿复现
 
 ## 目录结构
 
 ```
 paper-reproduction-verifier/
-├── SKILL.md                      # 技能本体（指令 + 流程 + 红线检查 + 随机数据处理）
-├── README.md                     # 本文件：说明与各 Agent 安装方法
+├── SKILL.md                      # 主入口（路由文档）
+├── README.md                     # 本文件
+├── principles.md                 # 核心原则
+├── workflow.md                   # 完整流程
+├── red-line-checks.md            # 红线检查
+├── random-data-handling.md       # 随机数据处理
+├── output-management.md          # 产物管理
+├── report-writing-guide.md       # 报告撰写规范
+├── verdict-criteria.md           # 判定标准
 └── templates/
-    ├── 复现报告模板.tex          # 交付物 LaTeX 模板（xelatex + ctex 编译）
-    └── 复现报告示例.pdf          # 已生成的成品示例（匿名占位，仅示意结构）
+    ├── README.md                 # 模板使用说明
+    ├── 复现报告模板.tex          # LaTeX 报告模板
+    └── 复现报告示例.pdf          # 示例 PDF
 ```
 
-> 想先看产出长什么样，直接打开 `templates/复现报告示例.pdf`。该示例内容全为虚构占位，
-> 仅演示报告结构与"每个位置该写什么"，不含任何真实稿件信息。
+## 特性
 
-## 核心能力
+✅ **产物隔离**：所有复现产物放在作者文件夹外部，不污染原始代码  
+✅ **算力评估**：自动评估是否适合本地运行或需转移服务器  
+✅ **阶段化执行**：9 个阶段，支持暂停/恢复/跳过  
+✅ **红线检查**：自动检测阻断性问题（数据合成、模型未训练、结果硬编码等）  
+✅ **精简报告**：面向非技术编辑部人员，聚焦阻断性问题  
+✅ **模块化文档**：路由文档结构，易于维护和扩展
 
-- 分阶段流程：清点 → 论文研读 → 代码审查 → 复现执行 → 比对 → 产出。
-- **红线检查**：核心模型是否真训练/数据是否合成/指标是否真计算/结果是否硬编码。
-- **随机数据处理**：多种子统计取值范围，区分"随机抽样差异"与"结构性不可能"，避免误导作者。
-- 单一交付物：复现报告（问题反馈合并为一节）+ 复现率。
+## 快速开始
+
+```
+/paper-reproduction-verifier
+```
+
+Claude 会引导你完成复现验证流程。
+
+## 复现流程
+
+1. **清点文件与缺失项** - 列出随稿文件清单
+2. **算力需求预评估** - 判断本地 vs 服务器
+3. **论文研读** - 制作声称结果一览表
+4. **代码审查与红线检查** - 检测阻断性问题
+5. **数据准备** - 下载数据集（自动/手动）
+6. **环境搭建** - 安装依赖
+7. **执行代码** - 运行并记录日志
+8. **实跑vs论文比对** - 逐项对照
+9. **产出复现报告** - 生成 PDF 报告
+
+## 判定标准
+
+- **完全复现**（95%-100%）：核心结果差异 <2%，无阻断性问题
+- **部分复现**（60%-94%）：核心结果差异 2%-5%，或部分指标无法验证
+- **无法复现**（<60%）：核心结果差异 >5%，或存在阻断性问题
+
+## 输出示例
+
+```
+论文编号-论文名称/
+├── 作者代码文件夹/          (不污染，保持原样)
+└── 复现报告/                (所有复现产物)
+    ├── 复现报告.pdf
+    ├── 复现报告.tex
+    ├── run_output.log
+    ├── results/
+    └── 数据集下载说明.md      (如需要)
+```
 
 ---
 
@@ -48,39 +103,38 @@ paper-reproduction-verifier/
 
 ### 2) OpenAI Codex CLI
 
-Codex 已支持原生 skills 目录，使用与 Claude Code 相同的 `SKILL.md` 约定（`name` + `description` frontmatter），
-本 skill 可直接放入：
+Codex 已支持原生 skills 目录，使用与 Claude Code 相同的 `SKILL.md` 约定：
 
 - **macOS / Linux**：
   ```bash
   mkdir -p ~/.codex/skills
   cp -r paper-reproduction-verifier ~/.codex/skills/
-  # 或： git clone <repo-url> ~/.codex/skills/paper-reproduction-verifier
   ```
 - **Windows**：复制到 `%USERPROFILE%\.codex\skills\paper-reproduction-verifier\`。
-
-放好后 Codex 会按 `description` 自动匹配触发。
-（备选：也可把 `SKILL.md` 正文并入 `AGENTS.md` 作为常驻指令，但有原生 skills 目录时无需如此。）
 
 ### 3) OpenCode
 
 OpenCode 支持自定义命令/agent。配置目录——macOS/Linux：`~/.config/opencode/`；Windows：`%USERPROFILE%\.config\opencode\`；项目级：`.opencode/`。
 
-- **自定义命令**：在 `.opencode/command/repro-verify.md` 写一行引用或直接粘贴 `SKILL.md` 正文，
-  用 `/repro-verify` 触发。
+- **自定义命令**：在 `.opencode/command/repro-verify.md` 写一行引用或直接粘贴 `SKILL.md` 正文。
 - **自定义 agent**：在 OpenCode 的 agent 配置中，把 `SKILL.md` 正文作为该 agent 的 system prompt。
-
-> 通用做法：任何支持"自定义 system prompt / 指令文件"的 Agent，都可直接把 `SKILL.md` 正文作为指令注入；
-> `templates/复现报告模板.tex` 作为交付物模板随附即可。
 
 ---
 
 ## 交付物编译
 
 ```bash
-xelatex 复现报告模板.tex      # 需要 TeX 发行版（MiKTeX/TeX Live）+ ctex 宏包，支持中文
+xelatex 复现报告模板.tex      # 需要 TeX 发行版（MiKTeX/TeX Live）+ ctex 宏包
 ```
 
-## 依赖（被核验项目通常需要）
+## 依赖
 
 核验时按被审稿件自身的依赖搭环境；本 skill 本身无运行时依赖，仅需一个能跑 xelatex 的环境来编译报告。
+
+## 贡献
+
+欢迎提 Issue 和 PR！
+
+## License
+
+MIT
